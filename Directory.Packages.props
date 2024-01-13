@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally> 
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="Microsoft.Maui.Controls" Version="8.0.3" />
