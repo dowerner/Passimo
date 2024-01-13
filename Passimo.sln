@@ -1,0 +1,53 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34408.163
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{6EE8CC9B-2504-4807-8C54-7A097EE70CC2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{C1917436-3A57-4346-8647-E28C97621C72}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Passimo.Cryptography", "src\Passimo.Cryptography\Passimo.Cryptography.csproj", "{37A43E06-CF68-4D26-B248-B1ED20D7DDD9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EE973AA0-929B-45E0-B0F2-DB37B778CBCA}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Packages.props = Directory.Packages.props
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Passimo.App", "src\Passimo.App\Passimo.App.csproj", "{7C037DCF-52B8-4A65-B1A0-B718F2DCECB8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Passimo.Cryptography.Tests", "tests\Passimo.Cryptography.Tests\Passimo.Cryptography.Tests.csproj", "{BA8363C9-51A0-4592-8A9E-19709B812E26}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{37A43E06-CF68-4D26-B248-B1ED20D7DDD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37A43E06-CF68-4D26-B248-B1ED20D7DDD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37A43E06-CF68-4D26-B248-B1ED20D7DDD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37A43E06-CF68-4D26-B248-B1ED20D7DDD9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C037DCF-52B8-4A65-B1A0-B718F2DCECB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C037DCF-52B8-4A65-B1A0-B718F2DCECB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C037DCF-52B8-4A65-B1A0-B718F2DCECB8}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{7C037DCF-52B8-4A65-B1A0-B718F2DCECB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C037DCF-52B8-4A65-B1A0-B718F2DCECB8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C037DCF-52B8-4A65-B1A0-B718F2DCECB8}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{BA8363C9-51A0-4592-8A9E-19709B812E26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA8363C9-51A0-4592-8A9E-19709B812E26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA8363C9-51A0-4592-8A9E-19709B812E26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA8363C9-51A0-4592-8A9E-19709B812E26}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{37A43E06-CF68-4D26-B248-B1ED20D7DDD9} = {6EE8CC9B-2504-4807-8C54-7A097EE70CC2}
+		{7C037DCF-52B8-4A65-B1A0-B718F2DCECB8} = {6EE8CC9B-2504-4807-8C54-7A097EE70CC2}
+		{BA8363C9-51A0-4592-8A9E-19709B812E26} = {C1917436-3A57-4346-8647-E28C97621C72}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C678CE99-3C53-4763-9673-F5BAD1BA9EEC}
+	EndGlobalSection
+EndGlobal
