@@ -1,4 +1,6 @@
-﻿namespace Passimo
+﻿using Passimo.Resources.Localization;
+
+namespace Passimo
 {
     public partial class MainPage : ContentPage
     {
@@ -7,6 +9,8 @@
         public MainPage()
         {
             InitializeComponent();
+
+            LocalizationTestLabel.Text = AppResources.PasswordContainer_Description;
         }
 
         private void OnCounterClicked(object sender, EventArgs e)
