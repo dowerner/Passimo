@@ -10,6 +10,8 @@ namespace Passimo
         {
             InitializeComponent();
 
+            Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("de-DE");
+            Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("de-DE");
             LocalizationTestLabel.Text = AppResources.PasswordContainer_Description;
         }
 

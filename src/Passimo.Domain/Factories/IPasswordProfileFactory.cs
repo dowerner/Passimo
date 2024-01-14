@@ -5,4 +5,6 @@ namespace Passimo.Domain.Factories;
 public interface IPasswordProfileFactory
 {
     PasswordProfile Create(string name);
+
+    PasswordProfile CreateDefault();
 }

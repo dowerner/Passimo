@@ -113,5 +113,14 @@ namespace Passimo.Resources.Localization {
                 return ResourceManager.GetString("PasswordContainer.Username", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to My Profile.
+        /// </summary>
+        public static string PasswordProfile_DefaultProfileName {
+            get {
+                return ResourceManager.GetString("PasswordProfile.DefaultProfileName", resourceCulture);
+            }
+        }
     }
 }

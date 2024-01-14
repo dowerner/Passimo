@@ -8,6 +8,13 @@ public static class PasswordContainerExtensions
     {
         field.NameLocalized = false;
         field.Name = customName;
+        field.Updated = DateTimeOffset.UtcNow;
         return field;
+    }
+
+    public static void UpdateValue(this PasswordEntryInfoField field, string value)
+    {
+        field.UpdateValue(value);
+        field.Updated = DateTimeOffset.UtcNow;
     }
 }

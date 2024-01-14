@@ -10,9 +10,17 @@ public enum PasswordEntryFiedType
 
 public abstract class PasswordEntryField
 {
+    public PasswordEntryField()
+    {
+        Created = DateTimeOffset.UtcNow;
+        Updated = DateTimeOffset.UtcNow;
+    }
+
     public string Name { get; set; } = string.Empty;
     public bool NameLocalized { get; set; }
     public PasswordEntryFiedType Type { get; set; }
+    public DateTimeOffset Created { get; set; }
+    public DateTimeOffset Updated { get; set; }
 }
 
 public class PasswordEntryInfoField : PasswordEntryField

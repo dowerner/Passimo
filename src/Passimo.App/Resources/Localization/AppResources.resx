@@ -135,4 +135,7 @@
   <data name="PasswordContainer.Username" xml:space="preserve">
     <value>Username</value>
   </data>
+  <data name="PasswordProfile.DefaultProfileName" xml:space="preserve">
+    <value>My Profile</value>
+  </data>
 </root>

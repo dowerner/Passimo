@@ -6,7 +6,10 @@ public abstract class PasswordContainerFactory<T> : IPasswordContainerFactory<T>
 {
     public virtual T Create(string? name)
     {
-        var passwordContainer = new T();
+        var passwordContainer = new T() { 
+            Created = DateTimeOffset.UtcNow,
+            Updated = DateTimeOffset.UtcNow,
+        };
         if (!string.IsNullOrEmpty(name)) passwordContainer.Name = name;
         return passwordContainer;
     }

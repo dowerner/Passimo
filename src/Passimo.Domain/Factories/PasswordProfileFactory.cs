@@ -14,10 +14,18 @@ public class PasswordProfileFactory : IPasswordProfileFactory
     {
         return new PasswordProfile
         {
-            Name = name,
-            Fields = [
-                _fieldFactory.CreateDescription()
-            ]
+            ProfileGuid = Guid.NewGuid(),
+            ProfileName = name,
+            Created = DateTime.UtcNow,
+            Updated = DateTime.UtcNow,
+            Fields = [ _fieldFactory.CreateDescription() ]
         };
+    }
+
+    public PasswordProfile CreateDefault()
+    {
+        var defaultProfile = Create(FactoryContstants.DefaultProfileName);
+        defaultProfile.NameLocalized = true;
+        return defaultProfile;
     }
 }
