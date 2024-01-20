@@ -1,5 +1,6 @@
 ﻿using Passimo.Domain.Model;
 using Passimo.IO.Core.Segments;
+using System.Security;
 
 namespace Passimo.IO.Core.FileEncoding;
 
@@ -14,11 +15,14 @@ public class PasswordProfileEncoder
 
     public void Encode()
     {
-        var profileSegment = new ProfileSegment
+        var profileSegment = new ProfileSegment { EncodedObject = _profile };
+
+        var pw = new SecureString();
+        const string pwClear = "secret";
+        foreach (var c in pwClear)
         {
-            ProfileGuid = _profile.ProfileGuid,
-            ProfileName = _profile.ProfileName
-        };
+            pw.AppendChar(c);
+        }
 
         var encodingActions = profileSegment.GetEncodingActions();
     }

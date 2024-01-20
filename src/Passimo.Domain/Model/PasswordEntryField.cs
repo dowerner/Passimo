@@ -1,6 +1,8 @@
-﻿namespace Passimo.Domain.Model;
+﻿using System.Security;
 
-public enum PasswordEntryFiedType
+namespace Passimo.Domain.Model;
+
+public enum PasswordEntryFiedType : ushort
 {
     Text = 1,
     Link = 2,
@@ -31,5 +33,5 @@ public class PasswordEntryInfoField : PasswordEntryField
 
 public class PasswordEntryCryptographicField : PasswordEntryField
 {
-
+    public SecureString? Password { get; set; }
 }

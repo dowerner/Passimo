@@ -7,5 +7,6 @@ internal enum DataType : ushort
     Ushort = 2,
     Uint = 1,
     String = 100,
-    Guid = 101
+    Guid = 101,
+    DateTimeOffset = 102
 }
