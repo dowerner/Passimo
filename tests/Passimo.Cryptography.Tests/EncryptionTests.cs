@@ -11,9 +11,8 @@ public abstract class EncryptionTestsBase
     [InlineData("P@ssw0rd", "This message should be encrypted!")]
     public void SecretMessageGetEncrypedAndDecryptedAsExpected(string password, string message)
     {
-        var securePassword = CryptographyTestUtils.CreateSecureString(password);
-        var encrypted = EncryptionProcedure.EncryptWithPassword(message, securePassword);
-        var decrypted = EncryptionProcedure.DecryptWithPassword(encrypted, securePassword);
+        var encrypted = EncryptionProcedure.EncryptWithPassword(message, password);
+        var decrypted = EncryptionProcedure.DecryptWithPassword(encrypted, password);
         Assert.Equal(message, decrypted);
     }
 
@@ -49,20 +48,21 @@ public abstract class EncryptionTestsBase
         }
 
         var securePassword = CryptographyTestUtils.CreateSecureString("P@ssw0rd!");
+        var password = "P@ssw0rd!";
         var encryptedChunks = new byte[chunks.Count][];
 
         var test = EncryptionProcedure;
 
         Parallel.For(0, chunks.Count, i =>
         {
-            var encrypted = EncryptionProcedure.EncryptWithPassword(chunks[i], securePassword);
+            var encrypted = EncryptionProcedure.EncryptWithPassword(chunks[i], password);
             encryptedChunks[i] = encrypted;
         });
 
         var decryptedChunks = new byte[chunks.Count][];
         Parallel.For(0, chunks.Count, i =>
         {
-            var decrypted = EncryptionProcedure.DecryptWithPassword(encryptedChunks[i], securePassword);
+            var decrypted = EncryptionProcedure.DecryptWithPassword(encryptedChunks[i], password);
             decryptedChunks[i] = decrypted;
         });
 

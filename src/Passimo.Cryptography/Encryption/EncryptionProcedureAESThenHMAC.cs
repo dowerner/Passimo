@@ -96,7 +96,7 @@ internal class EncryptionProcedureAESThenHMAC : IEncryptionProcedure
     /// Significantly less secure than using random binary keys.
     /// Adds additional non secret payload for key generation parameters.
     /// </remarks>
-    public string EncryptWithPassword(string secretMessage, SecureString password, byte[]? nonSecretPayload = null)
+    public string EncryptWithPassword(string secretMessage, string password, byte[]? nonSecretPayload = null)
     {
         if (string.IsNullOrEmpty(secretMessage))
             throw new ArgumentException("Secret Message Required!", "secretMessage");
@@ -120,7 +120,7 @@ internal class EncryptionProcedureAESThenHMAC : IEncryptionProcedure
     /// <remarks>
     /// Significantly less secure than using random binary keys.
     /// </remarks>
-    public string DecryptWithPassword(string encryptedMessage, SecureString password, int nonSecretPayloadLength = 0)
+    public string DecryptWithPassword(string encryptedMessage, string password, int nonSecretPayloadLength = 0)
     {
         if (string.IsNullOrWhiteSpace(encryptedMessage))
             throw new ArgumentException("Encrypted Message Required!", "encryptedMessage");
@@ -281,14 +281,9 @@ internal class EncryptionProcedureAESThenHMAC : IEncryptionProcedure
     /// Significantly less secure than using random binary keys.
     /// Adds additional non secret payload for key generation parameters.
     /// </remarks>
-    public byte[] EncryptWithPassword(byte[] secretMessage, SecureString password, byte[]? nonSecretPayload = null)
+    public byte[] EncryptWithPassword(byte[] secretMessage, string password, byte[]? nonSecretPayload = null)
     {
         nonSecretPayload = nonSecretPayload ?? ""u8.ToArray();
-
-        using var passwordAccess = password.Access();
-
-        var plainPassword = string.Empty;
-        passwordAccess.GetValue(ref plainPassword);
 
         //User Error Checks
         if (password.Length < MinPasswordLength)
@@ -306,7 +301,7 @@ internal class EncryptionProcedureAESThenHMAC : IEncryptionProcedure
         byte[] authKey;
 
         //Use Random Salt to prevent pre-generated weak password attacks.
-        using (var generator = GetRfcDeriveBytes(plainPassword))
+        using (var generator = GetRfcDeriveBytes(password))
         {
             var salt = generator.Salt;
 
@@ -320,7 +315,7 @@ internal class EncryptionProcedureAESThenHMAC : IEncryptionProcedure
 
         //Deriving separate key, might be less efficient than using HKDF, 
         //but now compatible with RNEncryptor which had a very similar wireformat and requires less code than HKDF.
-        using (var generator = GetRfcDeriveBytes(plainPassword))
+        using (var generator = GetRfcDeriveBytes(password))
         {
             var salt = generator.Salt;
 
@@ -330,8 +325,6 @@ internal class EncryptionProcedureAESThenHMAC : IEncryptionProcedure
             //Create Rest of Non Secret Payload
             Array.Copy(salt, 0, payload, payloadIndex, salt.Length);
         }
-
-        passwordAccess.Scramble(ref plainPassword);
 
         return Encrypt(secretMessage, cryptKey, authKey, payload);
     }
@@ -350,13 +343,8 @@ internal class EncryptionProcedureAESThenHMAC : IEncryptionProcedure
     /// <remarks>
     /// Significantly less secure than using random binary keys.
     /// </remarks>
-    public byte[] DecryptWithPassword(byte[] encryptedMessage, SecureString password, int nonSecretPayloadLength = 0)
+    public byte[] DecryptWithPassword(byte[] encryptedMessage, string password, int nonSecretPayloadLength = 0)
     {
-        using var passwordAccess = password.Access();
-
-        var plainPassword = string.Empty;
-        passwordAccess.GetValue(ref plainPassword);
-
         //User Error Checks
         if ( password.Length < MinPasswordLength)
             throw new ArgumentException(string.Format("Must have a password of at least {0} characters!", MinPasswordLength), nameof(password));
@@ -375,17 +363,15 @@ internal class EncryptionProcedureAESThenHMAC : IEncryptionProcedure
         byte[] authKey;
 
         //Generate crypt key
-        using (var generator = GetRfcDeriveBytes(plainPassword, cryptSalt))
+        using (var generator = GetRfcDeriveBytes(password, cryptSalt))
         {
             cryptKey = generator.GetBytes(KeyBitSize / 8);
         }
         //Generate auth key
-        using (var generator = GetRfcDeriveBytes(plainPassword, authSalt))
+        using (var generator = GetRfcDeriveBytes(password, authSalt))
         {
             authKey = generator.GetBytes(KeyBitSize / 8);
         }
-
-        passwordAccess.Scramble(ref plainPassword);
 
         return Decrypt(encryptedMessage, cryptKey, authKey, cryptSalt.Length + authSalt.Length + nonSecretPayloadLength);
     }

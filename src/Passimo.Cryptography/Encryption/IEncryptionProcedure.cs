@@ -48,7 +48,7 @@ public interface IEncryptionProcedure
     /// Significantly less secure than using random binary keys.
     /// Adds additional non secret payload for key generation parameters.
     /// </remarks>
-    string EncryptWithPassword(string secretMessage, SecureString password, byte[]? nonSecretPayload = null);
+    string EncryptWithPassword(string secretMessage, string password, byte[]? nonSecretPayload = null);
 
     /// <summary>
     /// Simple Encryption (AES) then Authentication (HMAC) of a UTF8 message
@@ -65,7 +65,7 @@ public interface IEncryptionProcedure
     /// Significantly less secure than using random binary keys.
     /// Adds additional non secret payload for key generation parameters.
     /// </remarks>
-    byte[] EncryptWithPassword(byte[] secretMessage, SecureString password, byte[]? nonSecretPayload = null);
+    byte[] EncryptWithPassword(byte[] secretMessage, string password, byte[]? nonSecretPayload = null);
 
     /// <summary>
     /// Simple Authentication (HMAC) and then Descryption (AES) of a UTF8 Message
@@ -81,7 +81,7 @@ public interface IEncryptionProcedure
     /// <remarks>
     /// Significantly less secure than using random binary keys.
     /// </remarks>
-    byte[] DecryptWithPassword(byte[] encryptedMessage, SecureString password, int nonSecretPayloadLength = 0);
+    byte[] DecryptWithPassword(byte[] encryptedMessage, string password, int nonSecretPayloadLength = 0);
 
     /// <summary>
     /// Simple Authentication (HMAC) and then Descryption (AES) of a UTF8 Message
@@ -97,5 +97,5 @@ public interface IEncryptionProcedure
     /// <remarks>
     /// Significantly less secure than using random binary keys.
     /// </remarks>
-    string DecryptWithPassword(string encryptedMessage, SecureString password, int nonSecretPayloadLength = 0);
+    string DecryptWithPassword(string encryptedMessage, string password, int nonSecretPayloadLength = 0);
 }

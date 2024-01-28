@@ -33,5 +33,5 @@ public class PasswordEntryInfoField : PasswordEntryField
 
 public class PasswordEntryCryptographicField : PasswordEntryField
 {
-    public SecureString? Password { get; set; }
+    public byte[] EncryptedPassword { get; set; } = Array.Empty<byte>();
 }

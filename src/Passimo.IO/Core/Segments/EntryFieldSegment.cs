@@ -4,31 +4,31 @@ namespace Passimo.IO.Core.Segments;
 
 internal abstract class EntryFieldSegment<T> : FileSegment<T> where T : PasswordEntryField, new()
 {
-    protected override void DefineSegment()
+    public override void DefineSegment(List<EncodingAction>? encodingActions, List<DecodingAction>? decodingActions)
     {
-        DefineString(() => EncodedObject.Name, value => EncodedObject.Name = value);
-        DefineBool(() => EncodedObject.NameLocalized, value => EncodedObject.NameLocalized = value);
-        DefineUshort(() => (ushort)EncodedObject.Type, value => EncodedObject.Type = (PasswordEntryFiedType)value);
-        DefineDateTimeOffset(() => EncodedObject.Created, value => EncodedObject.Created = value);
-        DefineDateTimeOffset(() => EncodedObject.Updated, value => EncodedObject.Updated = value);
+        DefineString(() => EncodedObject.Name, value => EncodedObject.Name = value, encodingActions, decodingActions);
+        DefineBool(() => EncodedObject.NameLocalized, value => EncodedObject.NameLocalized = value, encodingActions, decodingActions);
+        DefineUshort(() => (ushort)EncodedObject.Type, value => EncodedObject.Type = (PasswordEntryFiedType)value, encodingActions, decodingActions);
+        DefineDateTimeOffset(() => EncodedObject.Created, value => EncodedObject.Created = value, encodingActions, decodingActions);
+        DefineDateTimeOffset(() => EncodedObject.Updated, value => EncodedObject.Updated = value, encodingActions, decodingActions);
     }
 }
 
 internal abstract class InfoEntryFieldSegment : EntryFieldSegment<PasswordEntryInfoField>
 {
-    protected override void DefineSegment()
+    public override void DefineSegment(List<EncodingAction>? encodingActions, List<DecodingAction>? decodingActions)
     {
-        base.DefineSegment();
-        DefineString(() => EncodedObject.Value, value =>  EncodedObject.Value = value);
-        DefineBool(() => EncodedObject.ValueLocalized, value => EncodedObject.ValueLocalized = value);
+        base.DefineSegment(encodingActions, decodingActions);
+        DefineString(() => EncodedObject.Value, value =>  EncodedObject.Value = value, encodingActions, decodingActions);
+        DefineBool(() => EncodedObject.ValueLocalized, value => EncodedObject.ValueLocalized = value, encodingActions, decodingActions);
     }
 }
 
 internal abstract class PasswordEntryFieldSegment : EntryFieldSegment<PasswordEntryCryptographicField>
 {
-    protected override void DefineSegment()
+    public override void DefineSegment(List<EncodingAction>? encodingActions, List<DecodingAction>? decodingActions)
     {
-        base.DefineSegment();
-        //EncodedObject.Password.
+        base.DefineSegment(encodingActions, decodingActions);
+        DefineBytes(() => EncodedObject.EncryptedPassword, value =>  EncodedObject.EncryptedPassword = value, encodingActions, decodingActions);
     }
 }
