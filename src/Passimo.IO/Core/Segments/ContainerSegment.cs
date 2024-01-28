@@ -2,9 +2,11 @@
 
 namespace Passimo.IO.Core.Segments;
 
-internal class EntrySegment : FileSegment<PasswordEntry>
+internal class EntrySegment : SegmentBase<PasswordEntry>
 {
-    public override void DefineSegment(List<EncodingAction>? encodingActions, List<DecodingAction>? decodingActions)
+    public override DataType SegmentType => DataType.EntrySegment;
+
+    protected override void DefineSegmentStructure(List<EncodingAction>? encodingActions, List<DecodingAction>? decodingActions)
     {
         DefineString(() => EncodedObject.Name, value => EncodedObject.Name = value, encodingActions, decodingActions);
         DefineDateTimeOffset(() => EncodedObject.Created, value => EncodedObject.Created = value, encodingActions, decodingActions);
@@ -13,9 +15,11 @@ internal class EntrySegment : FileSegment<PasswordEntry>
     }
 }
 
-internal class EntryGroupSegment : FileSegment<PasswordGroup>
+internal class EntryGroupSegment : SegmentBase<PasswordGroup>
 {
-    public override void DefineSegment(List<EncodingAction>? encodingActions, List<DecodingAction>? decodingActions)
+    public override DataType SegmentType => DataType.EntryGroupSegment;
+
+    protected override void DefineSegmentStructure(List<EncodingAction>? encodingActions, List<DecodingAction>? decodingActions)
     {
         DefineString(() => EncodedObject.Name, value => EncodedObject.Name = value, encodingActions, decodingActions);
         DefineDateTimeOffset(() => EncodedObject.Created, value => EncodedObject.Created = value, encodingActions, decodingActions);

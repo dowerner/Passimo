@@ -2,9 +2,9 @@
 
 namespace Passimo.IO.Core.Segments;
 
-internal abstract class EntryFieldSegment<T> : FileSegment<T> where T : PasswordEntryField, new()
+internal abstract class EntryFieldSegment<T> : SegmentBase<T> where T : PasswordEntryField, new()
 {
-    public override void DefineSegment(List<EncodingAction>? encodingActions, List<DecodingAction>? decodingActions)
+    protected override void DefineSegmentStructure(List<EncodingAction>? encodingActions, List<DecodingAction>? decodingActions)
     {
         DefineString(() => EncodedObject.Name, value => EncodedObject.Name = value, encodingActions, decodingActions);
         DefineBool(() => EncodedObject.NameLocalized, value => EncodedObject.NameLocalized = value, encodingActions, decodingActions);
@@ -14,21 +14,25 @@ internal abstract class EntryFieldSegment<T> : FileSegment<T> where T : Password
     }
 }
 
-internal abstract class InfoEntryFieldSegment : EntryFieldSegment<PasswordEntryInfoField>
+internal class InfoEntryFieldSegment : EntryFieldSegment<PasswordEntryInfoField>
 {
-    public override void DefineSegment(List<EncodingAction>? encodingActions, List<DecodingAction>? decodingActions)
+    public override DataType SegmentType => DataType.InfoEntryFieldSegment;
+
+    protected override void DefineSegmentStructure(List<EncodingAction>? encodingActions, List<DecodingAction>? decodingActions)
     {
-        base.DefineSegment(encodingActions, decodingActions);
+        base.DefineSegmentStructure(encodingActions, decodingActions);
         DefineString(() => EncodedObject.Value, value =>  EncodedObject.Value = value, encodingActions, decodingActions);
         DefineBool(() => EncodedObject.ValueLocalized, value => EncodedObject.ValueLocalized = value, encodingActions, decodingActions);
     }
 }
 
-internal abstract class PasswordEntryFieldSegment : EntryFieldSegment<PasswordEntryCryptographicField>
+internal class CryptographicEntryFieldSegment : EntryFieldSegment<PasswordEntryCryptographicField>
 {
-    public override void DefineSegment(List<EncodingAction>? encodingActions, List<DecodingAction>? decodingActions)
+    public override DataType SegmentType => DataType.CryptographicEntryFieldSegment;
+
+    protected override void DefineSegmentStructure(List<EncodingAction>? encodingActions, List<DecodingAction>? decodingActions)
     {
-        base.DefineSegment(encodingActions, decodingActions);
+        base.DefineSegmentStructure(encodingActions, decodingActions);
         DefineBytes(() => EncodedObject.EncryptedPassword, value =>  EncodedObject.EncryptedPassword = value, encodingActions, decodingActions);
     }
 }

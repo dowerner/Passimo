@@ -2,16 +2,18 @@
 
 namespace Passimo.IO.Core.Segments;
 
-internal class ProfileSegment : FileSegment<PasswordProfile>
+internal class ProfileSegment : SegmentBase<PasswordProfile>
 {
     // Header info for the decoder to recognize the file
     public const string FixedTypeString = "PASSIMO";
     public const uint CurrentFileModelVersion = 1;
 
+    public override DataType SegmentType => DataType.ProfileSegment;
+
     public string TypeString { get; set; } = string.Empty;
     public uint FileModelVersion { get; set; }
 
-    public override void DefineSegment(List<EncodingAction>? encodingActions, List<DecodingAction>? decodingActions)
+    protected override void DefineSegmentStructure(List<EncodingAction>? encodingActions, List<DecodingAction>? decodingActions)
     {
         // unencrypted profile info
         DefineString(() => FixedTypeString, value => TypeString = value, encodingActions, decodingActions);

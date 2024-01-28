@@ -25,5 +25,6 @@ public class PasswordProfileEncoder
         }
 
         var encodingActions = profileSegment.GetEncodingActions();
+        Console.Write("test");
     }
 }

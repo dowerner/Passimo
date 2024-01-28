@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Passimo.Domain.Model;
+using System.Collections;
 using System.Text;
 
 namespace Passimo.IO.Core.Segments;
@@ -24,6 +25,12 @@ internal class EncodingDataAction : EncodingAction
     public Func<byte[]> Getter { get; set; } = null!;
 }
 
+internal class EncodingSegmentStartAction : EncodingAction
+{
+    public DataType SegmentType { get; set; }
+}
+
+internal class EncodingSegmentEndAction : EncodingAction { }
 
 internal class EncodingListAction : EncodingDataAction
 {
@@ -33,12 +40,14 @@ internal class EncodingListAction : EncodingDataAction
 
 internal interface IFileSegment
 {
+    DataType SegmentType { get; }
     void DefineSegment(List<EncodingAction>? encodingActions, List<DecodingAction>? decodingActions);
 }
 
 
-internal abstract class FileSegment<T> : IFileSegment where T : class, new()
+internal abstract class SegmentBase<T> : IFileSegment where T : class, new()
 {
+    public abstract DataType SegmentType { get; }
     public T EncodedObject { get; set; } = new();
 
     public List<EncodingAction> GetEncodingActions()
@@ -48,10 +57,16 @@ internal abstract class FileSegment<T> : IFileSegment where T : class, new()
         DefineSegment(encodingActions, null);
 
         return encodingActions;
-    }
-    
+    }    
 
-    public abstract void DefineSegment(List<EncodingAction>? encodingActions, List<DecodingAction>? decodingActions);
+    public void DefineSegment(List<EncodingAction>? encodingActions, List<DecodingAction>? decodingActions)
+    {
+        encodingActions?.Add(new EncodingSegmentStartAction { SegmentType = SegmentType });
+        DefineSegmentStructure(encodingActions, decodingActions);
+        encodingActions?.Add(new EncodingSegmentEndAction());
+    }
+
+    protected abstract void DefineSegmentStructure(List<EncodingAction>? encodingActions, List<DecodingAction>? decodingActions);
 
     protected void DefineSegmentField(
         DataType dataType, 
@@ -126,6 +141,34 @@ internal abstract class FileSegment<T> : IFileSegment where T : class, new()
         DefineSegmentField(DataType.ByteArray, getter, setter, encodingActions, decodingActions);
     }
 
+    protected void DefineObject(Func<object> getter, Action<object> setter, List<EncodingAction>? encodingActions, List<DecodingAction>? decodingActions)
+    {
+        var obj = getter();
+        IFileSegment objectSegment;
+
+        switch (obj)
+        {
+            case PasswordEntry passwordEntry:
+                objectSegment = new EntrySegment { EncodedObject = passwordEntry };
+                break;
+            case PasswordGroup passwordGroup:
+                objectSegment = new EntryGroupSegment { EncodedObject = passwordGroup };
+                break;
+            case PasswordProfile passwordProfile:
+                objectSegment = new ProfileSegment { EncodedObject = passwordProfile };
+                break;
+            case PasswordEntryInfoField infoField:
+                objectSegment = new InfoEntryFieldSegment { EncodedObject = infoField };
+                break;
+            case PasswordEntryCryptographicField cryptographicField:
+                objectSegment = new CryptographicEntryFieldSegment { EncodedObject = cryptographicField };
+                break;
+            default: throw new ArgumentException($"Objects of type '{obj.GetType().Name}' are not supported.");
+        }
+
+        objectSegment.DefineSegment(encodingActions, decodingActions);
+    }
+
     protected void DefineList<TItem>(Func<List<TItem>> getter, Action<List<TItem>> setter, List<EncodingAction>? encodingActions, List<DecodingAction>? decodingActions)
     {
         if (encodingActions is not null)
@@ -158,9 +201,8 @@ internal abstract class FileSegment<T> : IFileSegment where T : class, new()
                 case List<byte[]> byteArrayList:
                     for (var i = 0; i < source.Count; ++i) DefineBytes(() => byteArrayList[i], v => byteArrayList[i] = v, encodingActions, null);
                     break;
-                case List<IFileSegment> segmentList:
-                    //todo: Does not work -> Segment encoding required
-                    foreach (var segment in segmentList) segment.DefineSegment(encodingActions, null);
+                case IList objectList:
+                    for (var i = 0; i < source.Count; ++i) DefineObject(() => objectList[i]!, v => objectList[i] = v, encodingActions, decodingActions);
                     break;
             }
         }        
@@ -177,11 +219,14 @@ internal abstract class FileSegment<T> : IFileSegment where T : class, new()
         if (type == typeof(Guid)) return DataType.Guid;
         if (type == typeof(byte[])) return DataType.ByteArray;
         if (type.IsSubclassOf(typeof(IList))) return DataType.List;
+        if (type == typeof(PasswordEntry)) return DataType.EntrySegment;
+        if (type == typeof(PasswordGroup)) return DataType.EntryGroupSegment;
+        if (type == typeof(PasswordProfile)) return DataType.ProfileSegment;
+        if (type == typeof(PasswordEntryInfoField)) return DataType.InfoEntryFieldSegment;
+        if (type == typeof(PasswordEntryCryptographicField)) return DataType.CryptographicEntryFieldSegment;
 
-        //todo: Does not work -> Segment encoding required
-        if (type.IsSubclassOf(typeof(IFileSegment))) return DataType.Segment;
+        throw new ArgumentException($"Unsupported type '{type.Name}'");
 
-        throw new ArgumentException($"The data type '{type.Name}' is not supported.");
     }
 
     protected void DefineWithEncryption(EncryptionType encryptionType, Action definitionAction, List<EncodingAction>? encodingActions, List<DecodingAction>? decodingActions)

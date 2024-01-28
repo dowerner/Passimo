@@ -11,5 +11,9 @@ internal enum DataType : ushort
     Guid = 101,
     DateTimeOffset = 102,
     List = 200,
-    Segment = 300,
+    EntrySegment = 300,
+    EntryGroupSegment = 301,
+    ProfileSegment = 302,
+    InfoEntryFieldSegment = 303,
+    CryptographicEntryFieldSegment = 304
 }
