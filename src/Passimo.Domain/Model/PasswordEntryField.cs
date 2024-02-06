@@ -1,4 +1,5 @@
 ﻿using System.Security;
+using System.Text.Json.Serialization;
 
 namespace Passimo.Domain.Model;
 
@@ -10,6 +11,8 @@ public enum PasswordEntryFiedType : ushort
     LongText = 4
 }
 
+[JsonDerivedType(typeof(PasswordEntryInfoField), typeDiscriminator: "I")]
+[JsonDerivedType(typeof(PasswordEntryCryptographicField), typeDiscriminator: "C")]
 public abstract class PasswordEntryField
 {
     public PasswordEntryField()

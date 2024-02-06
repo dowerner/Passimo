@@ -1,4 +1,9 @@
-﻿namespace Passimo.Domain.Model;
+﻿using System.Text.Json.Serialization;
+
+namespace Passimo.Domain.Model;
+
+[JsonDerivedType(typeof(PasswordEntry), typeDiscriminator: "E")]
+[JsonDerivedType(typeof(PasswordGroup), typeDiscriminator: "G")]
 public interface IPasswordContainer
 {
     string Name { get; set; }

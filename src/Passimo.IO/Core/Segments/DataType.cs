@@ -5,7 +5,7 @@ internal enum DataType : ushort
     Bool = 0,
     Byte = 1,
     Ushort = 2,
-    Uint = 1,
+    Uint = 3,
     ByteArray = 51,
     String = 100,
     Guid = 101,

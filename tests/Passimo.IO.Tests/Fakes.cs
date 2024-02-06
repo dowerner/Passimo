@@ -8,7 +8,7 @@ internal static class Fakes
     public const string FakePassword = "P@ssW0rd";
     public const int FakeMinEntriesPerLevel = 100;
     public const int FakeMaxEntriesPerLevel = 1000;
-    public const int FakeDepth = 1;
+    public const int FakeDepth = 2;
     public const int FakeSeed = 42;
     public const double FakeMaxGroupFraction = 0.1;
 
@@ -20,4 +20,12 @@ internal static class Fakes
         FakeSeed, 
         FakeMaxGroupFraction
     );
+
+    public static readonly PasswordProfile FakeSmallProfile = new PasswordProfileFaker(
+        FakePassword,
+        5,
+        10,
+        0,
+        FakeSeed,
+        0);
 }
