@@ -1,16 +1,15 @@
 ﻿using Bogus;
 using Passimo.Domain.Model;
 using Passimo.Cryptography.Encryption;
-using System.Text;
 
 namespace Passimo.TestUtils.Faker;
 
-public class PasswordEntryFaker : Faker<PasswordEntry>
+public class PasswordEntryFaker : Faker<PasswordEntry>, IEntryFaker
 {
     private readonly DateTimeOffset _minDate = new DateTimeOffset(2015, 1, 1, 0, 0, 0, TimeSpan.Zero);
     private readonly DateTimeOffset _maxDate = new DateTimeOffset(2024, 12, 31, 0, 0, 0, TimeSpan.Zero);
 
-    public PasswordEntryFaker(string masterPassword, int? seed = null)
+    public PasswordEntryFaker(Func<Bogus.Faker, byte[]> getFakePw, int? seed = null)
     {
         if (seed is not null) UseSeed(seed.Value);
 
@@ -22,10 +21,6 @@ public class PasswordEntryFaker : Faker<PasswordEntry>
         RuleFor(e => e.Fields, (f, e) =>
         {
             var url = $"https://{e.Name.ToLower().Replace(" ", "-").Replace(".", "-")}.com";
-            var pw = f.Internet.Password();
-
-            var pwBytes = Encoding.UTF8.GetBytes(pw);
-            var encryptedPw = encryption.EncryptWithPassword(pwBytes, masterPassword);
 
             var fields = new List<PasswordEntryField>
             {
@@ -33,10 +28,13 @@ public class PasswordEntryFaker : Faker<PasswordEntry>
                 new PasswordEntryInfoField { Name = "PasswordContainer_Username", NameLocalized = true, Type = PasswordEntryFiedType.Text, Value = "miriam.muster" },
                 new PasswordEntryInfoField { Name = "PasswordContainer_Email", NameLocalized = true, Type = PasswordEntryFiedType.Text, Value = "miriam.muster@mail.com" },
                 new PasswordEntryInfoField { Name = "PasswordContainer_Url", NameLocalized = true, Type = PasswordEntryFiedType.Text, Value = url },
-                new PasswordEntryCryptographicField { Name = "PasswordContainer_Password", NameLocalized = true, Type = PasswordEntryFiedType.Password, EncryptedPassword = encryptedPw }
+                new PasswordEntryCryptographicField { Name = "PasswordContainer_Password", NameLocalized = true, Type = PasswordEntryFiedType.Password, EncryptedPassword = getFakePw(f) }
             };
 
             return fields;
         });
     }
+
+    public List<IPasswordContainer> GenerateEntries(int count)
+        => Generate(count).Cast<IPasswordContainer>().ToList();
 }

@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Passimo.IO\Passimo.IO.csproj" />
+    <ProjectReference Include="..\Passimo.TestUtils\Passimo.TestUtils.csproj" />
   </ItemGroup>
 
 </Project>
