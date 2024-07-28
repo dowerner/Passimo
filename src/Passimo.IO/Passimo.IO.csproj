@@ -24,6 +24,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\Passimo.Cryptography\Passimo.Cryptography.csproj" />
 	  <ProjectReference Include="..\Passimo.Domain\Passimo.Domain.csproj" />
 	</ItemGroup>
 

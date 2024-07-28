@@ -7,7 +7,7 @@ public static class EncryptionMethod
 
     private static readonly Dictionary<EncryptionType, IEncryptionProcedure> _procedures = [];
 
-    private static IEncryptionProcedure GetMethod(EncryptionType encryptionType)
+    public static IEncryptionProcedure GetMethod(EncryptionType encryptionType)
     {
         if (!_procedures.ContainsKey(encryptionType))
         {

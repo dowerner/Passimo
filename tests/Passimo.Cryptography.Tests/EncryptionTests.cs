@@ -1,5 +1,4 @@
-﻿using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
-using Passimo.Cryptography.Encryption;
+﻿using Passimo.Cryptography.Encryption;
 
 namespace Passimo.Cryptography.Tests;
 
